@@ -6,6 +6,7 @@ import { jwtVerify } from 'jose'
 const allowedOrigins = [
   'http://localhost:3000',
   'https://resume-app-psi.vercel.app',
+  'https://resume-new-pearl.vercel.app',
   'https://resume-app-git-main-enoram.vercel.app'
 ]
 
