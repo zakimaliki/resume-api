@@ -2,6 +2,13 @@ import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 import { jwtVerify } from 'jose'
 
+// List of allowed origins
+const allowedOrigins = [
+  'http://localhost:3000',
+  'https://resume-app-psi.vercel.app',
+  'https://resume-app-git-main-enoram.vercel.app'
+]
+
 export async function middleware(request: NextRequest) {
   // Get the pathname of the request
   const path = request.nextUrl.pathname
@@ -10,18 +17,26 @@ export async function middleware(request: NextRequest) {
   const isPublicPath = path === '/api/auth/login' || path === '/api/auth/register'
 
   // Get the origin from the request headers
-  const origin = request.headers.get('origin') || '*'
+  const origin = request.headers.get('origin') || allowedOrigins[0]
+  
+  // Check if the origin is allowed
+  const isAllowedOrigin = allowedOrigins.includes(origin)
+  
+  // Set CORS headers
+  const corsHeaders = {
+    'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
+    'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+    'Access-Control-Allow-Credentials': 'true',
+    'Access-Control-Max-Age': '86400',
+  }
 
   // Handle preflight requests
   if (request.method === 'OPTIONS') {
     return new NextResponse(null, {
       status: 204,
       headers: {
-        'Access-Control-Allow-Origin': origin,
-        'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
-        'Access-Control-Allow-Headers': 'Content-Type, Authorization',
-        'Access-Control-Allow-Credentials': 'true',
-        'Access-Control-Max-Age': '86400',
+        ...corsHeaders,
+        'Access-Control-Allow-Origin': isAllowedOrigin ? origin : allowedOrigins[0],
       },
     })
   }
@@ -32,10 +47,10 @@ export async function middleware(request: NextRequest) {
   // If it's a public path, allow the request with CORS headers
   if (isPublicPath) {
     const response = NextResponse.next()
-    response.headers.set('Access-Control-Allow-Origin', origin)
-    response.headers.set('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS')
-    response.headers.set('Access-Control-Allow-Headers', 'Content-Type, Authorization')
-    response.headers.set('Access-Control-Allow-Credentials', 'true')
+    Object.entries(corsHeaders).forEach(([key, value]) => {
+      response.headers.set(key, value)
+    })
+    response.headers.set('Access-Control-Allow-Origin', isAllowedOrigin ? origin : allowedOrigins[0])
     return response
   }
 
@@ -45,10 +60,10 @@ export async function middleware(request: NextRequest) {
       { error: 'Authentication required' },
       { status: 401 }
     )
-    response.headers.set('Access-Control-Allow-Origin', origin)
-    response.headers.set('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS')
-    response.headers.set('Access-Control-Allow-Headers', 'Content-Type, Authorization')
-    response.headers.set('Access-Control-Allow-Credentials', 'true')
+    Object.entries(corsHeaders).forEach(([key, value]) => {
+      response.headers.set(key, value)
+    })
+    response.headers.set('Access-Control-Allow-Origin', isAllowedOrigin ? origin : allowedOrigins[0])
     return response
   }
 
@@ -61,10 +76,10 @@ export async function middleware(request: NextRequest) {
 
     // If verification is successful, allow the request with CORS headers
     const response = NextResponse.next()
-    response.headers.set('Access-Control-Allow-Origin', origin)
-    response.headers.set('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS')
-    response.headers.set('Access-Control-Allow-Headers', 'Content-Type, Authorization')
-    response.headers.set('Access-Control-Allow-Credentials', 'true')
+    Object.entries(corsHeaders).forEach(([key, value]) => {
+      response.headers.set(key, value)
+    })
+    response.headers.set('Access-Control-Allow-Origin', isAllowedOrigin ? origin : allowedOrigins[0])
     return response
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   } catch (error) {
@@ -73,10 +88,10 @@ export async function middleware(request: NextRequest) {
       { error: 'Invalid token' },
       { status: 401 }
     )
-    response.headers.set('Access-Control-Allow-Origin', origin)
-    response.headers.set('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS')
-    response.headers.set('Access-Control-Allow-Headers', 'Content-Type, Authorization')
-    response.headers.set('Access-Control-Allow-Credentials', 'true')
+    Object.entries(corsHeaders).forEach(([key, value]) => {
+      response.headers.set(key, value)
+    })
+    response.headers.set('Access-Control-Allow-Origin', isAllowedOrigin ? origin : allowedOrigins[0])
     return response
   }
 }
@@ -89,4 +104,4 @@ export const config = {
     '/api/interviewers/:path*',
     '/api/auth/:path*',
   ],
-}
+} 
