@@ -41,8 +41,11 @@ export async function middleware(request: NextRequest) {
     })
   }
 
-  // Get the token from the cookie
-  const token = request.cookies.get('token')?.value
+  // Get the token from either Authorization header or cookie
+  const authHeader = request.headers.get('Authorization')
+  const tokenFromHeader = authHeader?.startsWith('Bearer ') ? authHeader.substring(7) : null
+  const tokenFromCookie = request.cookies.get('token')?.value
+  const token = tokenFromHeader || tokenFromCookie
 
   // If it's a public path, allow the request with CORS headers
   if (isPublicPath) {

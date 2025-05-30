@@ -56,11 +56,25 @@ export async function POST(request: Request) {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { password: _, ...userWithoutPassword } = user;
 
-    return NextResponse.json({
+    // Create response with user data
+    const response = NextResponse.json({
       message: 'Login successful',
       user: userWithoutPassword,
       token,
     });
+
+    // Set cookie with proper attributes for cross-origin requests
+    response.cookies.set({
+      name: 'token',
+      value: token,
+      httpOnly: true,
+      secure: true,
+      sameSite: 'none',
+      path: '/',
+      maxAge: 60 * 60 * 24, // 1 day in seconds
+    });
+
+    return response;
   } catch (error) {
     console.error('Login error:', error);
     return NextResponse.json(
