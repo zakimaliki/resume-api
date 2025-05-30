@@ -7,7 +7,7 @@ const allowedOrigins = [
   'http://localhost:3000',
   'https://resume-app-psi.vercel.app',
   'https://resume-new-pearl.vercel.app',
-  'https://resume-app-git-main-enoram.vercel.app'
+  'https://resume-new--resume-new-th0rfnd3.web.app'
 ]
 
 export async function middleware(request: NextRequest) {
