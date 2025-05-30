@@ -20,6 +20,7 @@ export async function middleware(request: NextRequest) {
         'Access-Control-Allow-Origin': origin,
         'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
         'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+        'Access-Control-Allow-Credentials': 'true',
         'Access-Control-Max-Age': '86400',
       },
     })
@@ -34,6 +35,7 @@ export async function middleware(request: NextRequest) {
     response.headers.set('Access-Control-Allow-Origin', origin)
     response.headers.set('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS')
     response.headers.set('Access-Control-Allow-Headers', 'Content-Type, Authorization')
+    response.headers.set('Access-Control-Allow-Credentials', 'true')
     return response
   }
 
@@ -46,6 +48,7 @@ export async function middleware(request: NextRequest) {
     response.headers.set('Access-Control-Allow-Origin', origin)
     response.headers.set('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS')
     response.headers.set('Access-Control-Allow-Headers', 'Content-Type, Authorization')
+    response.headers.set('Access-Control-Allow-Credentials', 'true')
     return response
   }
 
@@ -61,6 +64,7 @@ export async function middleware(request: NextRequest) {
     response.headers.set('Access-Control-Allow-Origin', origin)
     response.headers.set('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS')
     response.headers.set('Access-Control-Allow-Headers', 'Content-Type, Authorization')
+    response.headers.set('Access-Control-Allow-Credentials', 'true')
     return response
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   } catch (error) {
@@ -72,6 +76,7 @@ export async function middleware(request: NextRequest) {
     response.headers.set('Access-Control-Allow-Origin', origin)
     response.headers.set('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS')
     response.headers.set('Access-Control-Allow-Headers', 'Content-Type, Authorization')
+    response.headers.set('Access-Control-Allow-Credentials', 'true')
     return response
   }
 }
@@ -84,4 +89,4 @@ export const config = {
     '/api/interviewers/:path*',
     '/api/auth/:path*',
   ],
-} 
+}
